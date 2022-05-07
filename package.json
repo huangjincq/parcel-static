@@ -11,7 +11,7 @@
     "start": "parcel --open",
     "build": "parcel build",
     "distServer": "node scripts/distServer.js",
-    "predeploy": "parcel build --no-optimize",
+    "predeploy": "parcel build --no-optimize --public-url ./",
     "deploy": "gh-pages -d dist"
   },
   "keywords": [],
