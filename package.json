@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "start": "parcel --open",
-    "build": "parcel build"
+    "build": "parcel build",
+    "build:gh-pages": "parcel build"
   },
   "keywords": [],
   "author": "",
