@@ -10,6 +10,7 @@
   "scripts": {
     "start": "parcel --open",
     "build": "parcel build",
+    "distServer": "node scripts/distServer.js",
     "predeploy": "parcel build --no-optimize",
     "deploy": "gh-pages -d dist"
   },
