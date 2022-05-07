@@ -10,7 +10,7 @@ const deploy = () => {
   execSync(`git commit -m 'deploy'`)
   execSync(`git push -f git@github.com:huangjincq/parcel-static.git master:gh-pages`)
 
-  execSync(`-`)
+  execSync(`cd -`)
 }
 
 deploy()
