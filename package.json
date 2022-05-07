@@ -2,6 +2,7 @@
   "name": "parcel-static",
   "version": "1.0.0",
   "description": "",
+  "homepage": "https://huangjincq.github.io/parcel-static",
   "source": [
     "src/index.html",
     "src/html/amy_installed.html",
