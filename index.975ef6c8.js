@@ -25085,7 +25085,7 @@ function App() {
             children: [
                 /*#__PURE__*/ _jsxDevRuntime.jsxDEV("li", {
                     children: /*#__PURE__*/ _jsxDevRuntime.jsxDEV("a", {
-                        href: "/html/amy_installed.html",
+                        href: "/parcel-static/html/amy_installed.html",
                         children: "Amy Install Preview Page"
                     }, void 0, false, {
                         fileName: "src/App.js",
@@ -25099,7 +25099,7 @@ function App() {
                 }, this),
                 /*#__PURE__*/ _jsxDevRuntime.jsxDEV("li", {
                     children: /*#__PURE__*/ _jsxDevRuntime.jsxDEV("a", {
-                        href: "/html/test.html",
+                        href: "/parcel-static/html/test.html",
                         children: "Test 1"
                     }, void 0, false, {
                         fileName: "src/App.js",
