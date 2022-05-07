@@ -10,7 +10,8 @@
   "scripts": {
     "start": "parcel --open",
     "build": "parcel build",
-    "build:gh-pages": "parcel build --no-optimize"
+    "build:gh-pages": "parcel build --no-optimize",
+    "deploy": "node scripts/deploy.js"
   },
   "keywords": [],
   "author": "",
