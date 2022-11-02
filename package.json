@@ -11,6 +11,7 @@
   "scripts": {
     "start": "parcel --open",
     "build": "parcel build",
+    "build:tow-fa": "parcel build two-fa.js --dist-dir=twofa",
     "distServer": "node scripts/distServer.js",
     "predeploy": "parcel build --no-optimize --public-url ./",
     "deploy": "gh-pages -d dist"

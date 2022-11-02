@@ -16,12 +16,14 @@
     <div id="app"></div>
     <button id="start2FA">start 2FA</button>
     <script type="module" src="index.js"></script>
+    <script src="./two-fa.js"></script>
 
     <div class="wrapper">
       <two-fa id="two-fa" pre-token="123" style="display: none" />
     </div>
 
     <script>
+      //
       const $twoFa = document.getElementById('two-fa')
 
       var twoFAVerifyResponse = null
@@ -29,9 +31,11 @@
       const twoFAVerifying = () => {
         twoFAVerifyResponse = null
         var timer = null
-
+        // 设定多久超时
+        var count = 0
         return new Promise((resolve, reject) => {
           timer = setInterval(() => {
+            count++
             if (twoFAVerifyResponse) {
               if (twoFAVerifyResponse.errorCode === 0) {
                 clearInterval(timer)
@@ -41,6 +45,12 @@
                 reject(twoFAVerifyResponse.errorMessage)
               }
             }
+            // 600s 超时 直接失败
+            if (count > 6000) {
+              clearInterval(timer)
+              timer = null
+              reject('Timeout')
+            }
           }, 100)
         })
       }
@@ -48,8 +58,15 @@
       start2FA.onclick = async function () {
         console.log('start 2FA')
 
+        // createElement
+
         $twoFa.style.display = 'block'
         $twoFa.setAttribute('pre-token', Math.floor(Math.random() * 100000))
+
+        $twoFa.addEventListener('TWO_FA_EVENT', (e) => {
+          // console.log('receive message: ', e.detail)
+          twoFAVerifyResponse = e.detail
+        })
 
         const res = await twoFAVerifying()
 
@@ -58,13 +75,6 @@
 
         console.log('end 2FA getToken:' + res.token)
       }
-
-      // const listenerMessage = ()
-
-      window.addEventListener('TWO_FA_EVENT', (e) => {
-        // console.log('receive message: ', e.detail)
-        twoFAVerifyResponse = e.detail
-      })
     </script>
   </body>
 </html>
