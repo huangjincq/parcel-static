@@ -9,5 +9,14 @@
   <body>
     <div id="app"></div>
     <script type="module" src="index.js"></script>
+    <react-counter default-value="2" />
+    <script>
+      // document.querySelector('#reset').addEventListener('click', () => {
+      //   document.querySelector('#react-counter').setAttribute('startvalue', Math.floor(Math.random() * 100000))
+      // })
+      window.addEventListener('WEBCOMP-REACTCOMP-actualValue', (e) => {
+        console.log('actualValue: ' + e.detail)
+      })
+    </script>
   </body>
 </html>
