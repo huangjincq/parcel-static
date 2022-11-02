@@ -1,36 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef } from 'react'
+
 import PropTypes from 'prop-types'
 
-const TwoFa = ({ preToken }) => {
+const TwoFa = ({ preLoginResponse, language }) => {
+  const domRef = useRef()
+
   const onVerifySuccess = () => {
-    sendMessage({
-      errorCode: 0,
-      errorMessage: '',
-      data: { token: 'token-xxxxx' },
-    })
+    const customEvent = new CustomEvent('success', { detail: { token: 'token-xxxxx' } })
+    domRef.current.parentNode.dispatchEvent(customEvent)
   }
 
   const onVerifyError = () => {
-    sendMessage({ errorCode: 1, errorMessage: 'TimeOut' })
-  }
-
-  const sendMessage = (data) => {
-    const customEvent = new CustomEvent('TWO_FA_EVENT', { detail: data })
-    window.dispatchEvent(customEvent)
+    const customEvent = new CustomEvent('error', { detail: { errorCode: 1, errorMessage: 'TimeOut' } })
+    domRef.current.parentNode.dispatchEvent(customEvent)
   }
 
   return (
-    <div>
-      <h2>
-        PreToken: <b>{preToken}</b>
-      </h2>
+    <div ref={domRef}>
+      <h2>preLoginResponse: {preLoginResponse}</h2>
+      <hr />
+      <h3>language: {language}</h3>
       <button onClick={onVerifySuccess}>Verify Success</button>
       <button onClick={onVerifyError}>Verify Error</button>
     </div>
   )
 }
+
+// 必须要这个 不然 props 传不进来
 TwoFa.propTypes = {
-  preToken: PropTypes.string.isRequired,
+  preLoginResponse: PropTypes.string.isRequired,
+  language: PropTypes.string.isRequired,
 }
 
 export default TwoFa
