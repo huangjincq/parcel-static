@@ -4,9 +4,7 @@
   "description": "",
   "homepage": "https://huangjincq.github.io/parcel-static",
   "source": [
-    "src/index.html",
-    "src/html/amy_installed.html",
-    "src/html/test.html"
+    "src/index.html"
   ],
   "scripts": {
     "start": "parcel --open",
