@@ -13,3 +13,11 @@ export enum CallEventName {
   Cancel = 'cancel',
   Mute = 'mute',
 }
+
+export enum CallUIState {
+  Dialer = 'dialer',
+  Dialing = 'dialing',
+  InACall = 'inACall',
+  OnHold = 'onHold',
+  IncomingCall = 'incomingCall',
+}
