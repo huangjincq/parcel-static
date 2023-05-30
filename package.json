@@ -18,12 +18,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.5.0",
     "buffer": "^6.0.3",
     "gh-pages": "^3.2.3",
     "parcel": "^2.5.0",
     "process": "^0.11.10"
   },
   "dependencies": {
+    "@antv/layout": "^0.3.22",
+    "@antv/x6": "^2.11.1",
     "axios": "^0.27.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
