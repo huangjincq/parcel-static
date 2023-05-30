@@ -4,7 +4,8 @@ const createData = (data) => {
   const nodes = data.map((v, i) => {
     const label = v.title || v.taskId;
     return {
-      shape: 'rect',
+      // shape: 'rect',
+      shape: 'custom-rect',
       color: '#1890FF',
       label: label,
 
@@ -23,6 +24,17 @@ const createData = (data) => {
           source: taskItem.taskId,
           target: taskId,
           shape: 'edge',
+          attrs: {
+            line: {
+              stroke: '#A2B1C3',
+              strokeWidth: 2,
+              targetMarker: {
+                name: 'block',
+                width: 12,
+                height: 8,
+              },
+            },
+          },
         });
       }
     });

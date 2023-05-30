@@ -1,24 +1,28 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Graph } from '@antv/x6';
 import './index.scss';
 import createData from './createData';
 import { DagreLayout } from '@antv/layout';
+import { DiffDialog } from './DiffDialog';
+import { E6Render } from './E6Render';
 
 const data = {
   nodes: [
     {
       id: 'node1',
-      shape: 'rect',
-      x: 40,
-      y: 40,
+      shape: 'custom-rect',
       width: 100,
       height: 40,
       label: 'hello',
+      attrs: {
+        body: {
+          // fill: '#ff00ff',
+        },
+      },
     },
     {
       id: 'node2',
-      shape: 'rect',
-
+      shape: 'custom-rect',
       width: 100,
       height: 40,
       label: 'world',
@@ -29,58 +33,24 @@ const data = {
       shape: 'edge',
       source: 'node1',
       target: 'node2',
+      attrs: {
+        line: {
+          stroke: '#A2B1C3',
+          strokeWidth: 2,
+        },
+      },
+      zIndex: 0,
     },
   ],
 };
 
 export function App() {
-  const refContainer = useRef();
-
-  useEffect(() => {
-    const graph = new Graph({
-      container: refContainer.current, // 网格
-      // 网格
-      grid: true,
-      // 剪切板
-      clipboard: true,
-      // 键盘快捷键
-      keyboard: true,
-      // 撤销/重做
-      history: true,
-      panning: {
-        enabled: true,
-        eventTypes: ['leftMouseDown', 'mouseWheel'],
-      },
-      mousewheel: {
-        enabled: true,
-        zoomAtMousePosition: true,
-        // modifiers: 'ctrl',
-        minScale: 0.1,
-        maxScale: 1,
-      },
-      // 设置画布背景颜色
-      background: {
-        color: '#F2F7FA',
-      },
-      autoResize: true,
-    });
-    // 自动 dagre 布局
-    const dagreLayout = new DagreLayout({
-      type: 'dagre',
-      rankdir: 'LR',
-      align: 'UR',
-      ranksep: 100,
-      nodesep: 15,
-    });
-    const model = dagreLayout.layout(createData);
-
-    graph.fromJSON(model); // 渲染元素
-    graph.centerContent(); // 居中显示
-  }, []);
+  const [flowData, setFlowData] = useState(createData);
 
   return (
     <div className="helloworld-app">
-      <div className="app-content" ref={refContainer}></div>
+      <E6Render data={createData} onChange={setFlowData} />
+      <DiffDialog currentData={flowData} />
     </div>
   );
 }
