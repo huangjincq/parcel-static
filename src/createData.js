@@ -2,7 +2,7 @@ import mockData from './mockData.json';
 
 const createData = (data) => {
   const nodes = data.map((v, i) => {
-    const label = v.title || v.taskId;
+    const label = v.taskId; // v.title
     return {
       // shape: 'rect',
       shape: 'custom-rect',
@@ -12,6 +12,7 @@ const createData = (data) => {
       width: getTextWith(label),
       height: 40,
       id: v.taskId,
+      // tools: ['button-remove'],
     };
   });
 
@@ -24,15 +25,18 @@ const createData = (data) => {
           source: taskItem.taskId,
           target: taskId,
           shape: 'edge',
+          zIndex: 0,
+          // tools: ['button-remove'],
+
           attrs: {
             line: {
               stroke: '#A2B1C3',
-              strokeWidth: 2,
-              targetMarker: {
-                name: 'block',
-                width: 12,
-                height: 8,
-              },
+              // strokeWidth: 2,
+              // targetMarker: {
+              //   name: 'block',
+              //   width: 12,
+              //   height: 8,
+              // },
             },
           },
         });

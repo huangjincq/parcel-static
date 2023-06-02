@@ -25,6 +25,7 @@
     "process": "^0.11.10"
   },
   "dependencies": {
+    "@ant-design/pro-components": "^2.5.4",
     "@antv/layout": "^0.3.22",
     "@antv/x6": "^2.11.1",
     "@antv/x6-plugin-clipboard": "^2.1.6",
@@ -35,10 +36,12 @@
     "@antv/x6-plugin-snapline": "^2.1.7",
     "@antv/x6-plugin-stencil": "^2.0.3",
     "@antv/x6-plugin-transform": "^2.1.7",
+    "antd": "^5.5.2",
     "axios": "^0.27.2",
     "insert-css": "^2.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
+    "react-diff-viewer-continued": "^3.2.6",
     "react-dom": "^18.2.0",
     "react-to-webcomponent": "^2.0.0-alpha.0"
   }

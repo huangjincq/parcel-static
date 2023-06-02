@@ -26,7 +26,6 @@ export const diff = (current, origin) => {
     }
   });
 
-  console.log(deletedNodes);
   // 删除的节点
   mergeNodes = mergeNodes.concat(
     deletedNodes.map((d) => ({

@@ -39,7 +39,6 @@ const data = {
           strokeWidth: 2,
         },
       },
-      zIndex: 0,
     },
   ],
 };

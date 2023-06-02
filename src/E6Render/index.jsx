@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { DagreLayout } from '@antv/layout';
 import { Graph, Shape } from '@antv/x6';
 import { Stencil } from '@antv/x6-plugin-stencil';
-import { Transform } from '@antv/x6-plugin-transform';
+// import { Transform } from '@antv/x6-plugin-transform';
 import { Selection } from '@antv/x6-plugin-selection';
 import { Snapline } from '@antv/x6-plugin-snapline';
 import { Keyboard } from '@antv/x6-plugin-keyboard';
@@ -10,6 +10,54 @@ import { Clipboard } from '@antv/x6-plugin-clipboard';
 import { History } from '@antv/x6-plugin-history';
 import './index.scss';
 import { Export } from '@antv/x6-plugin-export';
+
+// #region 初始化图形
+const ports = {
+  groups: {
+    right: {
+      position: 'right',
+      attrs: {
+        circle: {
+          r: 4,
+          magnet: true,
+          stroke: '#5F95FF',
+          strokeWidth: 1,
+          fill: '#fff',
+          style: {
+            // visibility: 'hidden',
+          },
+        },
+      },
+    },
+  },
+  items: [
+    {
+      group: 'right',
+    },
+  ],
+};
+
+Graph.registerNode(
+  'custom-rect',
+  {
+    inherit: 'rect',
+    width: 66,
+    height: 36,
+    attrs: {
+      body: {
+        strokeWidth: 1,
+        stroke: '#5F95FF',
+        fill: '#EFF4FF',
+      },
+      text: {
+        fontSize: 12,
+        fill: '#262626',
+      },
+    },
+    ports: { ...ports },
+  },
+  true
+);
 
 export function E6Render({ data, onChange, isDiff = false }) {
   const refContainer = useRef();
@@ -26,31 +74,32 @@ export function E6Render({ data, onChange, isDiff = false }) {
         grid: true,
         panning: {
           enabled: true,
-          eventTypes: ['leftMouseDown', 'mouseWheel'],
+          // eventTypes: ['leftMouseDown', 'mouseWheel'],
         },
         mousewheel: {
           enabled: true,
-          zoomAtMousePosition: true,
-          modifiers: 'ctrl',
+          // factor: 1.1,
           minScale: 0.1,
-          maxScale: 1,
+          maxScale: 2,
         },
         connecting: {
-          router: 'manhattan',
-
-          connector: {
-            name: 'smooth',
-            // args: {
-            //   radius: 8,
-            // },
-          },
-          anchor: 'center',
-
-          // connectionPoint: 'anchor', // 箭头的位置
-          allowBlank: false,
-          snap: {
-            radius: 20,
-          },
+          router: 'metro', // normal ｜ orth ｜ oneSide ｜ manhattan ｜ metro ｜ er
+          // connector: {
+          //   // name: 'smooth',
+          //   // args: {
+          //   //   radius: 8,
+          //   // },
+          // },
+          // anchor: 'center',
+          // connectionPoint: 'anchor', // anchor - 将 将锚点作为连接点
+          allowBlank: false, // 是否允许连接到画布空白位置的点
+          allowLoop: false, // 是否允许创建循环连线，即边的起始节点和终止节点为同一节点
+          allowNode: true, // 是否允许边连接到节点
+          allowEdge: false, // 是否允许边连接到另一个边
+          allowPort: false, // 是否允许边连接到连接桩
+          allowMulti: false, // 不允许 相同的起始节点和终止之间 创建多条边
+          highlight: true,
+          // 自定义新建的边的样式
           createEdge() {
             return new Shape.Edge({
               attrs: {
@@ -67,17 +116,18 @@ export function E6Render({ data, onChange, isDiff = false }) {
               zIndex: 0,
             });
           },
-          validateConnection({ targetMagnet }) {
-            return !!targetMagnet;
-          },
+          // validateConnection({ targetMagnet }) {
+          //   return !!targetMagnet;
+          // },
         },
         highlighting: {
           magnetAdsorbed: {
             name: 'stroke',
             args: {
+              padding: 4,
               attrs: {
-                fill: '#5F95FF',
-                stroke: '#5F95FF',
+                fill: 'rgba(95,149,255,0.6)',
+                stroke: 'rgba(95,149,255,0.6)',
               },
             },
           },
@@ -88,16 +138,19 @@ export function E6Render({ data, onChange, isDiff = false }) {
 
       // #region 使用插件
       graph
-        .use(
-          new Transform({
-            resizing: true,
-            rotating: false,
-          })
-        )
+        // .use(
+        //   new Transform({
+        //     resizing: true,
+        //     rotating: false,
+        //   })
+        // )
         .use(
           new Selection({
-            // rubberband: true, // 是否启用框选
+            enabled: true,
+            rubberband: true, // 是否启用框选
             // showNodeSelectionBox: true,
+            showNodeSelectionBox: true,
+            modifiers: 'alt',
           })
         )
         .use(new Export())
@@ -201,125 +254,7 @@ export function E6Render({ data, onChange, isDiff = false }) {
         }
       });
 
-      // 控制连接桩显示/隐藏
-      const showPorts = (ports, show) => {
-        for (let i = 0, len = ports.length; i < len; i += 1) {
-          ports[i].style.visibility = show ? 'visible' : 'hidden';
-        }
-      };
-      graph.on('node:mouseenter', () => {
-        const container = refContainer.current;
-        const ports = container.querySelectorAll('.x6-port-body');
-        showPorts(ports, true);
-      });
-      graph.on('node:mouseleave', () => {
-        const container = refContainer.current;
-        const ports = container.querySelectorAll('.x6-port-body');
-        showPorts(ports, false);
-      });
       // #endregion
-
-      // #region 初始化图形
-      const ports = {
-        groups: {
-          top: {
-            position: 'top',
-            attrs: {
-              circle: {
-                r: 4,
-                magnet: true,
-                stroke: '#5F95FF',
-                strokeWidth: 1,
-                fill: '#fff',
-                style: {
-                  visibility: 'hidden',
-                },
-              },
-            },
-          },
-          right: {
-            position: 'right',
-            attrs: {
-              circle: {
-                r: 4,
-                magnet: true,
-                stroke: '#5F95FF',
-                strokeWidth: 1,
-                fill: '#fff',
-                style: {
-                  visibility: 'hidden',
-                },
-              },
-            },
-          },
-          bottom: {
-            position: 'bottom',
-            attrs: {
-              circle: {
-                r: 4,
-                magnet: true,
-                stroke: '#5F95FF',
-                strokeWidth: 1,
-                fill: '#fff',
-                style: {
-                  visibility: 'hidden',
-                },
-              },
-            },
-          },
-          left: {
-            position: 'left',
-            attrs: {
-              circle: {
-                r: 4,
-                magnet: true,
-                stroke: '#5F95FF',
-                strokeWidth: 1,
-                fill: '#fff',
-                style: {
-                  visibility: 'hidden',
-                },
-              },
-            },
-          },
-        },
-        items: [
-          {
-            group: 'top',
-          },
-          {
-            group: 'right',
-          },
-          {
-            group: 'bottom',
-          },
-          {
-            group: 'left',
-          },
-        ],
-      };
-
-      Graph.registerNode(
-        'custom-rect',
-        {
-          inherit: 'rect',
-          width: 66,
-          height: 36,
-          attrs: {
-            body: {
-              strokeWidth: 1,
-              stroke: '#5F95FF',
-              fill: '#EFF4FF',
-            },
-            text: {
-              fontSize: 12,
-              fill: '#262626',
-            },
-          },
-          ports: { ...ports },
-        },
-        true
-      );
 
       const r2 = graph.createNode({
         shape: 'custom-rect',
@@ -343,6 +278,7 @@ export function E6Render({ data, onChange, isDiff = false }) {
         graph.fromJSON(data); // 渲染元素
       }
       const zoomOptions = {
+        maxScale: 1,
         padding: {
           left: 10,
           right: 10,
@@ -352,8 +288,6 @@ export function E6Render({ data, onChange, isDiff = false }) {
       graph.centerContent(); // 居中显示
 
       const handleChange = () => {
-        console.log('onchange');
-
         const data2 = graph?.toJSON().cells;
         const data3 = {
           nodes: data2.filter((v) => v.shape === 'custom-rect'),
@@ -417,6 +351,10 @@ export function E6Render({ data, onChange, isDiff = false }) {
   const handleExport = () => {
     graphRef.current.exportPNG();
   };
+
+  const handleNodeMoveCenter = () => {
+    graphRef.current.centerCell(graphRef.current.getCells()[100]);
+  };
   return (
     <div style={{ height: '100vh', width: '100%', display: 'flex', flexDirection: 'column' }}>
       <div hidden={isDiff} style={{ borderBottom: '1px solid #000' }}>
@@ -424,6 +362,7 @@ export function E6Render({ data, onChange, isDiff = false }) {
         <button onClick={handleUndo}>撤销</button>
         <button onClick={handleRedo}>重做</button>
         <button onClick={handleExport}>导出</button>
+        <button onClick={handleNodeMoveCenter}>某个点移动到中心</button>
       </div>
       <div style={{ display: 'flex', flex: 1 }}>
         <div hidden={isDiff} className="stencil" ref={refStencil}></div>
