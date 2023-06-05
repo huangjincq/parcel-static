@@ -5,6 +5,7 @@ import createData from './createData';
 import { DagreLayout } from '@antv/layout';
 import { DiffDialog } from './DiffDialog';
 import { E6Render } from './E6Render';
+import { AirflowEditor } from './pages/AirflowEditor';
 
 const data = {
   nodes: [
@@ -47,9 +48,10 @@ export function App() {
   const [flowData, setFlowData] = useState(createData);
 
   return (
-    <div className="helloworld-app">
-      <E6Render data={createData} onChange={setFlowData} />
-      <DiffDialog currentData={flowData} />
-    </div>
+    <>
+      {/* <E6Render data={createData} onChange={setFlowData} />
+      <DiffDialog currentData={flowData} /> */}
+      <AirflowEditor />
+    </>
   );
 }

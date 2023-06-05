@@ -1,4 +1,58 @@
+body {
+  box-sizing: border-box;
+}
 * {
   margin: 0;
   padding: 0;
+  box-sizing: inherit;
+}
+
+.airflow-editor {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  .airflow-editor-main {
+    flex: 1;
+    height: 0;
+  }
+  .airflow-editor-main-right {
+    box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .tool-bar {
+    border-bottom: 1px solid #eeeff5;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    .tool-bar-left {
+      flex: 1;
+      .ant-btn-icon-only {
+        color: #444185;
+      }
+    }
+  }
+
+  .props-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 0;
+    .props-form-title {
+      padding: 16px 24px 0;
+    }
+    .props-form-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 24px 16px;
+    }
+  }
+
+  .mini-map {
+    height: 200px;
+  }
 }
