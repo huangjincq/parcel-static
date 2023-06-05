@@ -8,28 +8,39 @@ import MiniMap from './components/MiniMap';
 import { useRequest } from 'ahooks';
 import { createData } from '../../createData';
 import api from './api';
+import { Graph } from '@antv/x6';
+import { AirflowEditorManagerProvider } from './context/AirflowEditorManager';
 
 export const AirflowEditor = () => {
   const { data, loading, run } = useRequest(api.getJson);
-  const [editorInstance, setEditorInstance] = useState();
+  const [editorInstance, setEditorInstance] = useState<Graph>();
 
   const editorValue = useMemo(() => {
     return data ? createData(data) : [];
   }, [data]);
 
+  const airflowEditorManagerValue = useMemo(
+    () => ({
+      editorInstance,
+    }),
+    [editorInstance]
+  );
+
   return (
     <Spin spinning={loading}>
-      <div className="airflow-editor">
-        <Toolbar />
-        <div className="airflow-editor-main">
-          <NodeList editorInstance={editorInstance} />
-          <WorkSpace value={editorValue} setEditorInstance={setEditorInstance} />
-          <div className="airflow-editor-main-right">
-            <PropsForm />
-            <MiniMap />
+      <AirflowEditorManagerProvider value={airflowEditorManagerValue}>
+        <div className="airflow-editor">
+          <Toolbar />
+          <div className="airflow-editor-main">
+            <NodeList editorInstance={editorInstance} />
+            <WorkSpace value={editorValue} setEditorInstance={setEditorInstance} />
+            <div className="airflow-editor-main-right">
+              <PropsForm />
+              <MiniMap editorInstance={editorInstance} />
+            </div>
           </div>
         </div>
-      </div>
+      </AirflowEditorManagerProvider>
     </Spin>
   );
 };

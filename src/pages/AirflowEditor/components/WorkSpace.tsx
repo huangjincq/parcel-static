@@ -17,7 +17,7 @@ interface WorkSpaceProps {
 const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
   const contentRef = useRef();
 
-  const editorInstanceRef = useRef();
+  const editorInstanceRef = useRef<Graph | null>(null);
 
   const initEditor = () => {
     // #region 初始化画布
@@ -126,19 +126,6 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
       }
       return false;
     });
-    // undo redo
-    graph.bindKey(['meta+z', 'ctrl+z'], () => {
-      if (graph.canUndo()) {
-        graph.undo();
-      }
-      return false;
-    });
-    graph.bindKey(['meta+shift+z', 'ctrl+shift+z'], () => {
-      if (graph.canRedo()) {
-        graph.redo();
-      }
-      return false;
-    });
 
     // select all
     graph.bindKey(['meta+a', 'ctrl+a'], () => {
@@ -169,8 +156,6 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
         graph.zoom(-0.1);
       }
     });
-
-    // #endregion
 
     updateValue();
 
@@ -216,11 +201,14 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
     editorInstanceRef.current ? updateValue() : initEditor();
   }, [value]);
 
-  return (
-    <div className="work-space" ref={contentRef}>
-      WorkSpace
-    </div>
-  );
+  // 注销
+  useEffect(() => {
+    return () => {
+      editorInstanceRef.current?.dispose();
+    };
+  }, []);
+
+  return <div className="work-space" ref={contentRef}></div>;
 };
 
 export default WorkSpace;
