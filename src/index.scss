@@ -15,9 +15,16 @@ body {
   .airflow-editor-main {
     flex: 1;
     height: 0;
+    display: flex;
+    flex-shrink: 0;
+  }
+  .node-list {
+    box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.04);
+    width: 200px;
+    position: relative;
+    flex-shrink: 0;
   }
   .airflow-editor-main-right {
-    box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.04);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -36,12 +43,17 @@ body {
       }
     }
   }
-
+  .work-space {
+    width: 100%;
+    height: 100%;
+  }
   .props-form {
     flex: 1;
     display: flex;
     flex-direction: column;
     height: 0;
+    flex-shrink: 0;
+    width: 250px;
     .props-form-title {
       padding: 16px 24px 0;
     }

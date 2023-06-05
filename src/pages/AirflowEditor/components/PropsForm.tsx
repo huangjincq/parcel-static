@@ -40,10 +40,6 @@ const PropsForm = ({}: PropsFormProps) => {
     },
   ];
 
-  const handleFormChange = (e) => {
-    console.log(11, e);
-  };
-
   return (
     <div className="props-form">
       <Title className="props-form-title" level={4}>
@@ -51,13 +47,6 @@ const PropsForm = ({}: PropsFormProps) => {
       </Title>
       <div className="props-form-content">
         <BetaSchemaForm
-          onFormChange={handleFormChange}
-          rowProps={{
-            gutter: [16, 16],
-          }}
-          colProps={{
-            span: 12,
-          }}
           onFinish={async (values) => {
             console.log(values);
           }}

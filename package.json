@@ -36,6 +36,7 @@
     "@antv/x6-plugin-snapline": "^2.1.7",
     "@antv/x6-plugin-stencil": "^2.0.3",
     "@antv/x6-plugin-transform": "^2.1.7",
+    "ahooks": "^3.7.7",
     "antd": "^5.5.2",
     "axios": "^0.27.2",
     "insert-css": "^2.0.0",

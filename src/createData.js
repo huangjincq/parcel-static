@@ -1,6 +1,6 @@
 import mockData from './mockData.json';
 
-const createData = (data) => {
+export const createData = (data) => {
   const nodes = data.map((v, i) => {
     const label = v.taskId; // v.title
     return {
