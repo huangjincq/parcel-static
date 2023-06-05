@@ -135,14 +135,6 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
       }
     });
 
-    // delete
-    graph.bindKey('backspace', () => {
-      const cells = graph.getSelectedCells();
-      if (cells.length) {
-        graph.removeCells(cells);
-      }
-    });
-
     // zoom
     graph.bindKey(['ctrl+1', 'meta+1'], () => {
       const zoom = graph.zoom();
