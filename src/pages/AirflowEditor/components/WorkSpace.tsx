@@ -14,7 +14,7 @@ interface WorkSpaceProps {
 }
 export const scaleConfig = {
   min: 0.1,
-  max: 3,
+  max: 2,
 };
 const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
   const contentRef = useRef();

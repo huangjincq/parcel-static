@@ -27,26 +27,74 @@ const Toolbar = ({}: ToolBarProps) => {
   };
 
   const handleDelete = () => {
-    const cells = editorInstance?.getSelectedCells() ?? [];
-    if (cells.length) {
+    const cells = editorInstance?.getSelectedCells();
+    if (cells?.length) {
       editorInstance?.removeCells(cells);
     }
   };
 
   const handleZoomIn = (e) => {
     e.preventDefault();
-    const zoom = editorInstance?.zoom() || 1;
-    if (zoom < scaleConfig.max) {
+    const zoom = editorInstance?.zoom();
+    if (zoom && zoom < scaleConfig.max) {
       editorInstance?.zoom(0.1);
     }
   };
 
   const handleZoomOut = (e) => {
     e.preventDefault();
-    const zoom = editorInstance?.zoom() || 1;
-    if (zoom > scaleConfig.min) {
+    const zoom = editorInstance?.zoom();
+    if (zoom && zoom > scaleConfig.min) {
       editorInstance?.zoom(-0.1);
     }
+  };
+
+  const handleCopy = () => {
+    const cells = editorInstance?.getSelectedCells();
+    if (cells?.length) {
+      editorInstance?.copy(cells);
+    }
+    return false;
+  };
+
+  const handleCut = () => {
+    const cells = editorInstance?.getSelectedCells();
+    if (cells?.length) {
+      editorInstance?.cut(cells);
+    }
+    return false;
+  };
+
+  const handlePaste = () => {
+    if (!editorInstance?.isClipboardEmpty()) {
+      const cells = editorInstance?.paste({ offset: 32 });
+      editorInstance?.cleanSelection();
+      cells && editorInstance?.select(cells);
+    }
+    return false;
+  };
+
+  const handleSelectAll = () => {
+    const nodes = editorInstance?.getNodes();
+    if (nodes) {
+      editorInstance?.select(nodes);
+    }
+  };
+
+  const handleReCenter = () => {
+    const zoomOptions = {
+      maxScale: scaleConfig.max,
+      // padding: {
+      //   left: 10,
+      //   right: 10,
+      // },
+    };
+    editorInstance?.zoomToFit(zoomOptions); // 自动缩放到充满
+    editorInstance?.centerContent();
+  };
+
+  const handleAutoLayout = () => {
+    // todo 自动布局
   };
 
   useEffect(() => {
@@ -61,38 +109,14 @@ const Toolbar = ({}: ToolBarProps) => {
       editorInstance.bindKey(['ctrl+2', 'meta+2'], handleZoomOut);
 
       // 复制
-      editorInstance.bindKey(['meta+c', 'ctrl+c'], () => {
-        const cells = editorInstance.getSelectedCells();
-        if (cells.length) {
-          editorInstance.copy(cells);
-        }
-        return false;
-      });
+      editorInstance.bindKey(['meta+c', 'ctrl+c'], handleCopy);
       // 剪切
-      editorInstance.bindKey(['meta+x', 'ctrl+x'], () => {
-        const cells = editorInstance.getSelectedCells();
-        if (cells.length) {
-          editorInstance.cut(cells);
-        }
-        return false;
-      });
+      editorInstance.bindKey(['meta+x', 'ctrl+x'], handleCut);
       // 粘贴
-      editorInstance.bindKey(['meta+v', 'ctrl+v'], () => {
-        if (!editorInstance.isClipboardEmpty()) {
-          const cells = editorInstance.paste({ offset: 32 });
-          editorInstance.cleanSelection();
-          editorInstance.select(cells);
-        }
-        return false;
-      });
+      editorInstance.bindKey(['meta+v', 'ctrl+v'], handlePaste);
 
       // select all
-      editorInstance.bindKey(['meta+a', 'ctrl+a'], () => {
-        const nodes = editorInstance.getNodes();
-        if (nodes) {
-          editorInstance.select(nodes);
-        }
-      });
+      editorInstance.bindKey(['meta+a', 'ctrl+a'], handleSelectAll);
 
       // 监听历史记录变化
       editorInstance.on('history:change', () => {
@@ -125,11 +149,10 @@ const Toolbar = ({}: ToolBarProps) => {
           <ToolbarButton title="Zoom In" icon={<CIcon type="icon-zoom-in" />} onClick={handleZoomIn} />
           <ToolbarButton title="Zoom Out" icon={<CIcon type="icon-zoom-out" />} onClick={handleZoomOut} />
           <Divider type="vertical" />
-          <ToolbarButton title="Re Center" icon={<CIcon type="icon-re-center" />} />
+          <ToolbarButton title="Re Center" icon={<CIcon type="icon-re-center" onClick={handleReCenter} />} />
           <ToolbarButton title="Auto Layout" icon={<CIcon type="icon-auto-layout" />} />
-          {/* <Divider type="vertical" />
-          <ToolbarButton icon="iconjson" title="Json View" />
-          <ToolbarButton icon="icondesign" title="Designer View" /> */}
+          <Divider type="vertical" />
+          <ToolbarButton title="JSON View" icon={<CIcon type="icon-json-view" />} />
         </Space>
       </div>
       <div className="tool-bar-right">
