@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DagreLayout } from '@antv/layout';
 import { Graph, Shape } from '@antv/x6';
-import { Stencil } from '@antv/x6-plugin-stencil';
-// import { Transform } from '@antv/x6-plugin-transform';
 import { Selection } from '@antv/x6-plugin-selection';
 import { Snapline } from '@antv/x6-plugin-snapline';
 import { Keyboard } from '@antv/x6-plugin-keyboard';
@@ -14,6 +12,10 @@ interface WorkSpaceProps {
   setEditorInstance: any;
   value: any;
 }
+export const scaleConfig = {
+  min: 0.1,
+  max: 3,
+};
 const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
   const contentRef = useRef();
 
@@ -32,8 +34,8 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
       mousewheel: {
         enabled: true,
         // factor: 1.1,
-        minScale: 0.1,
-        maxScale: 2,
+        minScale: scaleConfig.min,
+        maxScale: scaleConfig.max,
       },
       connecting: {
         router: 'metro', // normal ｜ orth ｜ oneSide ｜ manhattan ｜ metro ｜ er
@@ -93,7 +95,7 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
           rubberband: true, // 是否启用框选
           // showNodeSelectionBox: true,
           showNodeSelectionBox: true,
-          modifiers: 'alt',
+          modifiers: ['meta', 'ctrl'],
         })
       )
       .use(new Export())
@@ -103,68 +105,17 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
       .use(new History());
     // #endregion
 
-    // #region 快捷键与事件
-    graph.bindKey(['meta+c', 'ctrl+c'], () => {
-      const cells = graph.getSelectedCells();
-      if (cells.length) {
-        graph.copy(cells);
-      }
-      return false;
-    });
-    graph.bindKey(['meta+x', 'ctrl+x'], () => {
-      const cells = graph.getSelectedCells();
-      if (cells.length) {
-        graph.cut(cells);
-      }
-      return false;
-    });
-    graph.bindKey(['meta+v', 'ctrl+v'], () => {
-      if (!graph.isClipboardEmpty()) {
-        const cells = graph.paste({ offset: 32 });
-        graph.cleanSelection();
-        graph.select(cells);
-      }
-      return false;
-    });
-
-    // select all
-    graph.bindKey(['meta+a', 'ctrl+a'], () => {
-      const nodes = graph.getNodes();
-      if (nodes) {
-        graph.select(nodes);
-      }
-    });
-
-    // zoom
-    graph.bindKey(['ctrl+1', 'meta+1'], () => {
-      const zoom = graph.zoom();
-      if (zoom < 1.5) {
-        graph.zoom(0.1);
-      }
-    });
-    graph.bindKey(['ctrl+2', 'meta+2'], () => {
-      const zoom = graph.zoom();
-      if (zoom > 0.5) {
-        graph.zoom(-0.1);
-      }
-    });
-
     updateValue();
 
-    const handleChange = () => {
-      const data2 = graph?.toJSON().cells;
-      const data3 = {
-        nodes: data2.filter((v) => v.shape === 'custom-rect'),
-        edges: data2
-          .filter((v) => v.shape === 'edge')
-          .map((v) => ({ ...v, source: v.source.cell, target: v.target.cell })),
-      };
-      // onChange?.(data3);
-    };
-    graph.on('edge:connected', handleChange); //  这个方法不准确
-    graph.on('edge:removed', handleChange);
-    graph.on('node:added', handleChange);
-    graph.on('node:removed', handleChange);
+    // const handleChange = () => {
+    //   const data2 = graph?.toJSON().cells;
+    //   const data3 = {
+    //     nodes: data2.filter((v) => v.shape === 'custom-rect'),
+    //     edges: data2
+    //       .filter((v) => v.shape === 'edge')
+    //       .map((v) => ({ ...v, source: v.source.cell, target: v.target.cell })),
+    //   };
+    // };
   };
 
   const updateValue = () => {
@@ -179,7 +130,7 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
     editorInstanceRef.current.fromJSON(model); // 渲染元素
 
     const zoomOptions = {
-      maxScale: 1,
+      maxScale: scaleConfig.max,
       padding: {
         left: 10,
         right: 10,
@@ -197,6 +148,7 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
   useEffect(() => {
     return () => {
       editorInstanceRef.current?.dispose();
+      editorInstanceRef.current = null;
     };
   }, []);
 
