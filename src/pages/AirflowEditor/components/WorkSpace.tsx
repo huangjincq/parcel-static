@@ -53,7 +53,7 @@ const WorkSpace = ({ setEditorInstance, value }: WorkSpaceProps) => {
         allowEdge: false, // 是否允许边连接到另一个边
         allowPort: false, // 是否允许边连接到连接桩
         allowMulti: false, // 不允许 相同的起始节点和终止之间 创建多条边
-        highlight: true,
+        // highlight: true,
         // 自定义新建的边的样式
         createEdge() {
           return new Shape.Edge({

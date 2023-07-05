@@ -2,7 +2,7 @@ import mockData from './mockData.json';
 
 export const createData = (data) => {
   const nodes = data.map((v, i) => {
-    const label = v.taskId; // v.title
+    const label = v.title || v.taskId; // v.taskId; // v.title
     return {
       // shape: 'rect',
       shape: 'custom-rect',
